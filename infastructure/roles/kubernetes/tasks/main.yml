@@ -1,0 +1,115 @@
+---
+# tasks file for kubernetes
+
+- name: Kubernetes common setup
+  block:
+
+  - name: Remove swapfile from /etc/fstab
+    mount:
+      name: "{{ item }}"
+      fstype: swap
+      state: absent
+    with_items:
+      - swap
+      - none
+
+  - name: Disable swap
+    command: swapoff -a
+    when: ansible_swaptotal_mb > 0
+
+  - name: Add an apt signing key for Kubernetes
+    apt_key:
+      url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      state: present
+
+  - name: Adding apt repository for Kubernetes
+    apt_repository:
+      repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+      state: present
+      filename: kubernetes.list
+
+  - name: Install Kubernetes binaries
+    apt:
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+        - kubelet
+        - kubeadm
+        - kubectl
+
+  - name: Configure node ip
+    lineinfile:
+      path: /etc/default/kubelet
+      line: KUBELET_EXTRA_ARGS=--node-ip={{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}
+      create: yes
+
+  - name: Restart kubelet
+    service:
+      name: kubelet
+      daemon_reload: yes
+      state: restarted
+
+- name: Kubernetes master setup
+  block:
+
+#  - name: Reset the Kubernetes cluster using kubeadm
+#    command: kubeadm reset
+#    ignore_errors: yes
+
+  - name: Initialize the Kubernetes cluster using kubeadm
+    command: kubeadm init --apiserver-advertise-address="192.168.33.10" --apiserver-cert-extra-sans="192.168.33.10" --node-name master-0 --pod-network-cidr=192.168.0.0/16
+
+  - name: Setup kubeconfig for vagrant user
+    command: "{{ item }}"
+    become: true
+    with_items:
+     - mkdir -p /home/vagrant/.kube
+     - cp -i /etc/kubernetes/admin.conf /home/vagrant/.kube/config
+     - chown vagrant:vagrant /home/vagrant/.kube/config
+
+  - name: Setup kubeconfig for ansible user
+    command: "{{ item }}"
+    become: true
+    with_items:
+     - mkdir -p /home/ansible/.kube
+     - cp -i /etc/kubernetes/admin.conf /home/ansible/.kube/config
+     - chown ansible:ansible /home/ansible/.kube/config
+
+  - name: Rewrite calico.yaml
+    template:
+       src: calico/3.15/calico.yaml
+       dest: /home/ansible/calico.yaml
+
+  - name: Install Calico (using Kubernetes API datastore)
+    become: false
+    command: kubectl apply -f /home/ansible/calico.yaml
+
+  - name: Generate join command
+    command: kubeadm token create --print-join-command
+    register: join_command
+
+  - name: Copy join command to file
+    delegate_to: localhost
+    become: false
+    copy:
+      content: "{{ join_command.stdout_lines[0] }}"
+      dest: /tmp/join-command.sh
+
+  when: "'k8s_masters' in group_names"
+
+- name: Kubernetes node setup
+  block:
+
+    - name: Copy the join command to server location
+      copy:
+        src: /tmp/join-command.sh
+        dest: /tmp/join-command.sh
+        mode: 0744
+
+    - name: Join the node to cluster
+      command: /bin/bash /tmp/join-command.sh
+
+  when: "'k8s_nodes' in group_names"
+  tags: join_cluster

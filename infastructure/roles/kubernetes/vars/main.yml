@@ -1,0 +1,4 @@
+---
+# vars file for kubernetes
+
+k8s_master_pod_network_cidr: 192.168.0.0/16

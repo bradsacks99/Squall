@@ -1,0 +1,4 @@
+src/*.sqlite
+src/*.pyc
+.pytest_cache
+__pycache__

@@ -1,0 +1,19 @@
+---
+
+- name: Include standard node
+  import_playbook: playbooks/standard_node.yaml
+  tags: standard_node
+
+- name: Install docker
+  hosts: cluster_nodes
+  become: yes
+  roles:
+    - docker
+  tags: install_docker
+
+- name: Setup Kubernetes
+  hosts: cluster_nodes
+  become: yes
+  roles:
+    - kubernetes
+

@@ -1,0 +1,13 @@
+---
+- name: Standard Node Config
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install packages
+      apt:
+        name: "{{ packages }}"
+        state: present
+        update_cache: yes
+      vars:
+        packages:
+        - net-tools

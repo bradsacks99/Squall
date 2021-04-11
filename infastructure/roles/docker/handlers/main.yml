@@ -1,0 +1,6 @@
+---
+- name: docker_status
+  service: name=docker state=started
+
+- name: docker_changed
+  service: name=docker state=restarted

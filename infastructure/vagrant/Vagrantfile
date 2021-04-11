@@ -1,0 +1,75 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$ubuntu_box = "bento/ubuntu-20.04"
+$master_cpu = 2
+$master_ram = 2048
+$node_cpu = 2
+$node_ram = 1024
+$squall_home = ENV["SQUALL_HOME"]
+
+$user_script = <<-SCRIPT
+export DEBIAN_FRONTEND=noninteractive
+useradd -G sudo -m ansible -s /bin/bash
+mkdir /home/ansible/.ssh
+echo $IDRSA_PUB > /home/ansible/.ssh/authorized_keys
+chown -R ansible:ansible /home/ansible/.ssh
+echo "ansible     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+echo "vagrant     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+echo "export SQUALL_HOME=/home/vagrant/squall_home" >> /home/vagrant/.bashrc
+SCRIPT
+
+Vagrant.configure("2") do |config|
+  config.vm.define "master-0" do |subconfig|
+    subconfig.vm.hostname = "master-0"
+    subconfig.vm.box = $ubuntu_box
+    subconfig.vm.network "private_network", ip: "192.168.33.10"
+    subconfig.vm.provision "shell", inline: $user_script
+    subconfig.vm.synced_folder $squall_home, "/home/vagrant/squall_home"
+    subconfig.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.name = "master-0"
+      vb.cpus = $master_cpu
+      vb.memory = $master_ram
+    end
+  end
+
+  config.vm.define "node-0" do |subconfig|
+    subconfig.vm.hostname = "node-0"
+    subconfig.vm.box = $ubuntu_box
+    subconfig.vm.network "private_network", ip: "192.168.33.11"
+    subconfig.vm.provision "shell", inline: $user_script
+    subconfig.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.name = "node-0"
+      vb.cpus = $node_cpu
+      vb.memory = $node_ram
+    end
+  end
+
+  config.vm.define "node-1" do |subconfig|
+    subconfig.vm.hostname = "node-1"
+    subconfig.vm.box = $ubuntu_box
+    subconfig.vm.network "private_network", ip: "192.168.33.12"
+    subconfig.vm.provision "shell", inline: $user_script
+    subconfig.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.name = "node-1"
+      vb.cpus = $node_cpu
+      vb.memory = $node_ram
+    end
+  end
+
+  config.vm.define "node-2" do |subconfig|
+    subconfig.vm.hostname = "node-3"
+    subconfig.vm.box = $ubuntu_box
+    subconfig.vm.network "private_network", ip: "192.168.33.13"
+    subconfig.vm.provision "shell", inline: $user_script
+    subconfig.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.name = "node-2"
+      vb.cpus = $node_cpu
+      vb.memory = $node_ram
+    end
+  end
+end

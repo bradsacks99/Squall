@@ -1,0 +1,9 @@
+version: '3.3'
+
+services:
+
+  squall:
+    build: squall
+    image: dockersamples/k8s-wordsmith-web
+    ports:
+     - "8080:80"

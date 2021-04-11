@@ -1,0 +1,66 @@
+# Headless service for stable DNS entries of DaemonSet members.
+apiVersion: v1
+kind: Service
+metadata:
+  name: squall-headless
+  labels:
+    app: squall
+  namespace: default
+spec:
+  ports:
+  - name: squall
+    port: 4321
+  clusterIP: None
+  selector:
+    app: squall
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: squall
+  labels:
+    app: squall
+spec:
+  type: NodePort
+  ports:
+  - name: squall
+    port: 80
+    targetPort: 80
+    nodePort: 30080
+  selector:
+    app: squall
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: squall
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: squall
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: squall
+    spec:
+      containers:
+      - name: squall
+        image: bsacks99/squall:latest
+        env:
+          - name: RAFT_SERVICE_NAME
+            value: "squall-headless"
+        ports:
+          - containerPort: 80
+            name: api
+          - containerPort: 4321
+            name: raft
+      imagePullSecrets:
+        - name: squall-registry

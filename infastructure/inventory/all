@@ -1,0 +1,11 @@
+[cluster_nodes:children]
+k8s_masters
+k8s_nodes
+
+[k8s_masters]
+master-0 ansible_host=192.168.33.10
+
+[k8s_nodes]
+node-0 ansible_host=192.168.33.11
+node-1 ansible_host=192.168.33.12
+node-2 ansible_host=192.168.33.13
