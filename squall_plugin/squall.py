@@ -31,7 +31,7 @@ def usage():
         {VALID_BENCHMARK_ARGS}
 
         Example:
-            kubectl squall benchmark run
+            kubectl squall benchmarks run
     API:
         Actions:
         {VALID_API_ACTIONS}
