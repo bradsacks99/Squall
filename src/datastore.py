@@ -24,7 +24,7 @@ class Datastore(SyncObj):
         self.port = port
         self.member_addresses = member_addresses
         this_node = f'{self.this_node_address}:{self.port}'
-        member_nodes = [ f'{ip}:{self.port}' for ip in self.member_addresses ]
+        member_nodes = [f'{ip}:{self.port}' for ip in self.member_addresses]
         cfg = SyncObjConf(dynamicMembershipChange=True, bindAddress=f'{self.this_node_address}:{self.port}')
         super(Datastore, self).__init__(this_node, member_nodes, cfg)
         self.__data = {}
@@ -176,7 +176,7 @@ class Datastore(SyncObj):
 
         return data_dict
 
-    async def update_members(self, member_addresses=None) -> list:
+    async def update_members(self, member_addresses: list = None) -> list:
         """
         Update members
 

@@ -1,0 +1,75 @@
+{ "benchmarks":  [
+  {
+    "id": "1.1.1",
+    "desc": "Ensure that the API server pod specification file permissions are set to 644 or more restrictive.",
+    "target": "master",
+    "command": "stat -c %a /etc/kubernetes/manifests/kube-apiserver.yaml",
+    "accept": "<=644"
+  },
+  {
+    "id": "1.1.2",
+    "desc": "Ensure that the API server pod specification file ownership is set to root:root",
+    "target": "master",
+    "command": "stat -c %U:%G /etc/kubernetes/manifests/kube-apiserver.yaml",
+    "accept": "root:root"
+  },
+  {
+    "id": "1.1.3",
+    "desc": "Ensure that the controller manager pod specification file has permissions of 644 or more restrictive.",
+    "target": "master",
+    "command": "stat -c %a /etc/kubernetes/manifests/kube-controller-manager.yaml",
+    "accept": "<=644"
+  },
+  {
+    "id": "1.1.4",
+    "desc": "Ensure that the controller manager pod specification file ownership is set to root:root.",
+    "target": "master",
+    "command": "stat -c %U:%G /etc/kubernetes/manifests/kube-controller-manager.yaml",
+    "accept": "root:root"
+  },
+  {
+    "id": "1.1.5",
+    "desc": "Ensure that the scheduler pod specification file has permissions of 644 or more restrictive.",
+    "target": "master",
+    "command": "stat -c %a /etc/kubernetes/manifests/kube-scheduler.yaml",
+    "accept": "<=644"
+  },
+  {
+    "id": "1.1.6",
+    "desc": "Ensure that the scheduler pod specification file ownership is set to root:root.",
+    "target": "master",
+    "command": "stat -c %U:%G /etc/kubernetes/manifests/kube-scheduler.yaml",
+    "accept": "root:root"
+  },
+  {
+    "id": "1.1.7",
+    "desc": "Ensure that the /etc/kubernetes/manifests/etcd.yaml file has permissions of 644 or more restrictive.",
+    "target": "master",
+    "command": "stat -c %a /etc/kubernetes/manifests/etcd.yaml",
+    "accept": "<=644"
+  },
+  {
+    "id": "1.1.8",
+    "desc": "Ensure that the /etc/kubernetes/manifests/etcd.yaml file ownership is set to root:root.",
+    "target": "master",
+    "command": "stat -c %U:%G /etc/kubernetes/manifests/etcd.yaml",
+    "accept": "root:root"
+  },
+  {
+    "id": "1.1.9",
+    "desc": "Ensure that the Container Network Interface files have permissions of 644 or more restrictive.",
+    "target": "master",
+    "prompt": "Enter the path to your network interface files:",
+    "command": "stat -c %a [[prompt_val]]",
+    "accept": "<=644"
+  },
+  {
+    "id": "1.1.10",
+    "desc": "Ensure that the Container Network Interface files have ownership set to root:root.",
+    "target": "master",
+    "prompt": "Enter the path to your network interface files:",
+    "command": "stat -c %U:%G [[prompt_val]]",
+    "accept": "root:root"
+  }
+]}
+

@@ -324,7 +324,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: calico-node
 rules:
-  # The CNI plugin needs to get pods, nodes, and namespaces.
+  # The CNI squall_plugin needs to get pods, nodes, and namespaces.
   - apiGroups: [""]
     resources:
       - pods
@@ -366,7 +366,7 @@ rules:
     verbs:
       - list
       - watch
-  # The CNI plugin patches pods/status.
+  # The CNI squall_plugin patches pods/status.
   - apiGroups: [""]
     resources:
       - pods/status

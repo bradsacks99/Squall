@@ -1,12 +1,13 @@
 from abc import ABCMeta, abstractmethod
 
+
 class ITask:
     """Task interface"""
 
     __metaclass__ = ABCMeta
 
     @classmethod
-    def version(self): return "1.0"
+    def version(cls): return "1.0"
 
     @abstractmethod
     def set_logger(self, logger): raise NotImplementedError

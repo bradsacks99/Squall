@@ -1,0 +1,15 @@
+---
+- name: Standard Node Config
+  hosts: k8s_masters
+  become: yes
+  tasks:
+    - name: Install plugin
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        mode: '0754'
+      with_items:
+        - src: ../../kubectl-squall
+          dest: /usr/local/bin/kubectl-squall
+        - src: ../../squall_plugin
+          dest: /usr/local/bin/

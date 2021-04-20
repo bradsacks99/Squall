@@ -11,3 +11,43 @@
       vars:
         packages:
         - net-tools
+        - ntp
+        - software-properties-common
+
+    - name: Add ppa:deadsnakes/ppa
+      apt_repository:
+        repo: ppa:deadsnakes/ppa
+        state: present
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Python packages
+      apt:
+        name: "{{ packages }}"
+        state: present
+        update_cache: yes
+      vars:
+        packages:
+        - python3.9
+        - python3-pip
+        - python3-apt
+
+    - name: Create Python symlink
+      ansible.builtin.file:
+        src: /usr/bin/python3.9
+        dest: /usr/bin/python
+        state: link
+
+#    - name: Create Python3 symlink
+#      ansible.builtin.file:
+#        src: /usr/bin/python3.9
+#        dest: /usr/bin/python3
+#        state: link
+
+    - name: Start ntp and enable on reboot
+      service:
+        name: ntp
+        state: started
+        enabled: yes

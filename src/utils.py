@@ -1,8 +1,7 @@
-import re
-import os
-import subprocess
 import ipaddress
-import asyncio
+import os
+import re
+import subprocess
 
 
 def get_network() -> str:
@@ -11,6 +10,9 @@ def get_network() -> str:
 
         Returns:
             str: network in cidr notation
+
+        Raises:
+            subprocess.CalledProcessError
     """
     is_mac = False
     try:
@@ -44,8 +46,8 @@ def get_network() -> str:
         mask_int = int(ipaddress.IPv4Address(mask))
         net_int = ip_int & mask_int
         net_addr = str(ipaddress.IPv4Address(net_int))
-        ip_address = f'{net_addr}/{bits}'
-    return ip_address
+        subnet = f'{net_addr}/{bits}'
+    return subnet
 
 
 def get_ip() -> str:

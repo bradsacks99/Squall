@@ -26,6 +26,7 @@ class ManageTasks:
 
         self.logger = None
         self.datastore = None
+        self.network_data = None
         self.pkg_dir = 'tasks'
         self.user_pkg_dir = 'user_tasks'
         self.jobs = {}
@@ -45,13 +46,27 @@ class ManageTasks:
             timezone=utc
         )
 
-    def set_logger(self, logger):
+    def set_logger(self, logger) -> None:
         """ Set logger"""
         self.logger = logger
 
-    def set_datastore(self, datastore):
+    def set_datastore(self, datastore) -> None:
         """" Set Data Store"""
         self.datastore = datastore
+
+    def set_network_data(self, network_data: dict = None) -> None:
+        """
+        set_network_data: Set's network data needed by jobs
+
+            Returns:
+                 None
+
+            Raises
+                ValueError: if network_data is not valid
+        """
+        if network_data is None or not isinstance(network_data, dict):
+            raise ValueError("network_data must be a dictionary")
+        self.network_data = network_data
 
     async def run_tasks(self) -> None:
         """
@@ -86,11 +101,13 @@ class ManageTasks:
                 a_class.datastore = self.datastore
 
             keyword_args = {
-                'logger': self.logger
+                'logger': self.logger,
+                'network_data': self.network_data
             }
 
             try:
                 keyword_args = a_class.get_config()
+                keyword_args['network_data'] = self.network_data
             except NotImplementedError:
                 self.logger.info("Config not implemented for " + str(a_class))
 
