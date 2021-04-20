@@ -1,5 +1,5 @@
 
-![Squall](https://github.com/bradsacks99/Squall/blob/main/logo.png | width=100)
+![Squall](https://github.com/bradsacks99/Squall/blob/main/src/static/squall_logo-300.png)
 
 ### Security Monitoring and Scanning Container for Kubernetes
 
