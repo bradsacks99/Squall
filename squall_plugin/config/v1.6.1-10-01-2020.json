@@ -60,6 +60,7 @@
     "desc": "Ensure that the Container Network Interface files have permissions of 644 or more restrictive.",
     "target": "master",
     "prompt": "Enter the path to your network interface files:",
+    "prompt_default": "/home/ansible/calico.yaml",
     "command": "stat -c %a [[prompt_val]]",
     "accept": "<=644"
   },
@@ -68,8 +69,72 @@
     "desc": "Ensure that the Container Network Interface files have ownership set to root:root.",
     "target": "master",
     "prompt": "Enter the path to your network interface files:",
+    "prompt_default": "/home/ansible/calico.yaml",
     "command": "stat -c %U:%G [[prompt_val]]",
     "accept": "root:root"
+  },
+  {
+    "id": "1.1.11",
+    "desc": "Ensure that the etcd data directory has permissions of 700 or more restrictive.",
+    "target": "master",
+    "command": "stat -c %a /var/lib/etcd",
+    "accept": "<=700"
+  },
+  {
+    "id": "1.1.12",
+    "desc": "Ensure that the etcd data directory ownership is set to etcd:etcd.",
+    "target": "master",
+    "command": "stat -c %U:%G /var/lib/etcd",
+    "accept": "etcd:etcd"
+  },
+  {
+    "id": "1.1.13",
+    "desc": "Ensure that the admin.conf file has permissions of 644 or more restrictive.",
+    "target": "master",
+    "command": "stat -c %a /etc/kubernetes/admin.conf",
+    "accept": "<=644"
+  },
+  {
+    "id": "1.1.14",
+    "desc": "Ensure that the admin.conf file ownership is set to root:root.",
+    "target": "master",
+    "command": "stat -c %U:%G /etc/kubernetes/admin.conf",
+    "accept": "root:root"
+  },
+  {
+    "id": "1.1.15",
+    "desc": "Ensure that the scheduler.conf file has permissions of 644 or more restrictive.",
+    "target": "master",
+    "command": "stat -c %a /etc/kubernetes/scheduler.conf",
+    "accept": "<=644"
+  },
+  {
+    "id": "1.1.16",
+    "desc": "Ensure that the scheduler.conf file ownership is set to root:root.",
+    "target": "master",
+    "command": "stat -c %U:%G /etc/kubernetes/scheduler.conf",
+    "accept": "root:root"
+  },
+  {
+    "id": "1.1.17",
+    "desc": "Ensure that the controller-manager.conf file has permissions of 644 or more restrictive.",
+    "target": "master",
+    "command": "stat -c %a /etc/kubernetes/controller-manager.conf",
+    "accept": "<=644"
+  },
+  {
+    "id": "1.1.18",
+    "desc": "Ensure that the controller-manager.conf file ownership is set to root:root.",
+    "target": "master",
+    "command": "stat -c %U:%G /etc/kubernetes/controller-manager.conf",
+    "accept": "root:root"
+  },
+  {
+    "id": "1.1.19",
+    "desc": "Ensure that the Kubernetes PKI directory and file ownership is set to root:root.",
+    "target": "master",
+    "command": "ls -laR /etc/kubernetes/pki/",
+    "accept": "root root"
   }
 ]}
 

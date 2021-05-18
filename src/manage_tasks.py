@@ -40,7 +40,7 @@ class ManageTasks:
         }
 
         self.scheduler = AsyncIOScheduler(
-            event_loop=asyncio.get_event_loop(),
+            event_loop=asyncio.get_running_loop(),
             job_defaults=job_defaults,
             jobstores=jobstores,
             timezone=utc
