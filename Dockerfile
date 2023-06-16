@@ -7,7 +7,7 @@ RUN apt-get install -y software-properties-common
 RUN add-apt-repository -y ppa:deadsnakes/ppa
 
 RUN apt-get update
-RUN apt install -y python3.9 \ 
+RUN apt install -y python3.9 \
     python3-pip \
     net-tools \
     dnsutils

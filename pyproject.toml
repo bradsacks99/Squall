@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "Squall"
 version = "0.1.0"
-description = "Security Monitoring and Scanning Container for Kubernetes"
+description = "Squall is a containerized workload scheduler"
 authors = ["Bradley Sacks <bradsacks99@gmail.com>"]
 license = "GPL-3.0-or-later"
 

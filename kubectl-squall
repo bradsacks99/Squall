@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-PYTHONPATH="/usr/local/bin/squall_plugin/:$PYTHONPATH"
-python /usr/local/bin/squall_plugin/squall.py $@

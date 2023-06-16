@@ -4,10 +4,6 @@
   import_playbook: playbooks/standard_node.yaml
   tags: standard_node
 
-- name: Deploy Squall Plugin
-  import_playbook: playbooks/deploy_squall_plugin.yaml
-  tags: deploy_plugin
-
 - name: Install docker
   hosts: cluster_nodes
   become: yes
